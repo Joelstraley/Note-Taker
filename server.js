@@ -1,23 +1,19 @@
 // Dependencies
-// =============================================================
-var express = require("express"); 
-var path = require("path");
-var notes = require("./db/db.json");
+const express = require("express"); 
+const path = require("path");
+const notes = require("./db/db.json");
 const fs = require("fs");
-// Sets up the Express App
-// =============================================================
-var app = express();
-var PORT = 3000;
+
+const app = express();
+const PORT = 3000;
 
 
-
-// Sets up the Express app to handle data parsing
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+/* app.use(express.static("Note-Taker"));
+ */ 
 
-// Basic route that sends the user first to the AJAX Page
 app.get("/notes", function(req, res) {
-  ///possibly read file 
     res.sendFile(path.join(__dirname, "/notes.html"));
   });
 
@@ -29,24 +25,39 @@ app.get("*", function(req, res) {
     return res.json(notes);
   });
 
-
-/* app.post("/api/notes", function(req, res) {
-  
+ app.post("/api/notes", function(req, res) {
   fs.readFile('db.json', function (err, data) {
-    var notes = JSON.parse(data);
-    //      _------- add expArray
-    json.expArray.push(newNote);
-    console.log(json);
-    fs.writeFile("expenses.json", JSON.stringify(exp), 
+    if (err) throw err; 
+    let data = []
+    data = JSON.parse(data);
+    req.body.id = data.length;
+    data.push(req.body);
+    data = JSON.stringify(data);
+    fs.writeFile("db.json", JSON.stringify(data), 
     function(err){
        if (err) throw err;
        console.log('success');
      });
+    res.json(JSON.parse(data));
+    })
+});
 
-Should receive a new note to save on the request body, add it to the db.json file, and then return the new note to the client.
-    res.json(newNote);
-  }); */
-
+app.delete("/api/notes/:id", function(req, res) {
+   fs.readFile('db.json', function (err, data) {
+    if (err) throw err; 
+    data = JSON.parse(data);
+    data.filter(function(note) {
+      return note.id !== parseInt(req.params.id);
+    });
+    data = JSON.stringify(data);
+    fs.writeFile("db.json", JSON.stringify(data), 
+    function(err){
+       if (err) throw err;
+       console.log('success');
+     });
+    res.json(JSON.parse(data));
+    })
+});
 
   app.listen(PORT, function() {
     console.log("App listening on PORT " + PORT);
