@@ -1,17 +1,17 @@
 // Dependencies
-const express = require("express"); 
-const path = require("path");
-const notes = require("./db/db.json");
-const fs = require("fs");
+var express = require("express"); 
+var path = require('path');
+var notes = require("./db/db.json");
+var fs = require("fs");
 
-const app = express();
-const PORT = 3000;
+var app = express();
+var PORT = 3010;
 
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-/* app.use(express.static("Note-Taker"));
- */ 
+app.use(express.static(path.join("assets/css")))
+app.use(express.static(path.join("assets/js")))
 
 app.get("/notes", function(req, res) {
     res.sendFile(path.join(__dirname, "/notes.html"));
@@ -25,15 +25,16 @@ app.get("*", function(req, res) {
     return res.json(notes);
   });
 
+  
+
  app.post("/api/notes", function(req, res) {
   fs.readFile('db.json', function (err, data) {
-    if (err) throw err; 
-    let data = []
-    data = JSON.parse(data);
+    if (err) throw err;   
+    let notesArray = []
+    JSON.parse(data);
     req.body.id = data.length;
-    data.push(req.body);
-    data = JSON.stringify(data);
-    fs.writeFile("db.json", JSON.stringify(data), 
+    notesArray.push(req.body);
+    fs.writeFile("./db/db.json", JSON.stringify(data), 
     function(err){
        if (err) throw err;
        console.log('success');
@@ -43,14 +44,13 @@ app.get("*", function(req, res) {
 });
 
 app.delete("/api/notes/:id", function(req, res) {
-   fs.readFile('db.json', function (err, data) {
+   fs.readFile("./db/db.json", function (err, data) {
     if (err) throw err; 
     data = JSON.parse(data);
     data.filter(function(note) {
       return note.id !== parseInt(req.params.id);
     });
-    data = JSON.stringify(data);
-    fs.writeFile("db.json", JSON.stringify(data), 
+    fs.writeFile("./db/db.json", JSON.stringify(data), 
     function(err){
        if (err) throw err;
        console.log('success');
