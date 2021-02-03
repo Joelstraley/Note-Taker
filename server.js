@@ -8,8 +8,8 @@ const fs = require("fs");
 // =============================================================
 var app = express();
 var PORT = 3000;
-console.log(notes)
-var id = 0;
+
+
 
 // Sets up the Express app to handle data parsing
 app.use(express.urlencoded({ extended: true }));
@@ -21,7 +21,7 @@ app.get("/notes", function(req, res) {
     res.sendFile(path.join(__dirname, "/notes.html"));
   });
 
-app.get("/", function(req, res) {
+app.get("*", function(req, res) {
     res.sendFile(path.join(__dirname, "/index.html"));
   });
   
@@ -30,7 +30,7 @@ app.get("/", function(req, res) {
   });
 
 
-app.post("/api/notes", function(req, res) {
+/* app.post("/api/notes", function(req, res) {
   
   fs.readFile('db.json', function (err, data) {
     var notes = JSON.parse(data);
@@ -40,19 +40,14 @@ app.post("/api/notes", function(req, res) {
     fs.writeFile("expenses.json", JSON.stringify(exp), 
     function(err){
        if (err) throw err;
-       console.log('sucess');
+       console.log('success');
      });
 
+Should receive a new note to save on the request body, add it to the db.json file, and then return the new note to the client.
     res.json(newNote);
-  });
-
-   
+  }); */
 
 
-
-
-  
   app.listen(PORT, function() {
     console.log("App listening on PORT " + PORT);
   });
-

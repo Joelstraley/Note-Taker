@@ -10,10 +10,20 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "inquirer": "^7.3.3",
+    "mysql": "^2.18.1"
   },
   "devDependencies": {
     "nodemon": "^2.0.7"
   },
-  "description": ""
+  "description": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Joelstraley/Note-Taker.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Joelstraley/Note-Taker/issues"
+  },
+  "homepage": "https://github.com/Joelstraley/Note-Taker#readme"
 }
