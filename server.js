@@ -10,15 +10,15 @@ var PORT = 3010;
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(express.static(path.join("assets/css")))
-app.use(express.static(path.join("assets/js")))
+app.use(express.static(path.join("public")))
+/* app.use(express.static(path.join("assets/js"))) */
 
 app.get("/notes", function(req, res) {
-    res.sendFile(path.join(__dirname, "/notes.html"));
+    res.sendFile(path.join(__dirname, "/public/notes.html"));
   });
 
-app.get("*", function(req, res) {
-    res.sendFile(path.join(__dirname, "/index.html"));
+app.get("/", function(req, res) {
+    res.sendFile(path.join(__dirname, "/public/index.html"));
   });
   
  app.get("/api/notes", function(req, res) { 
@@ -28,7 +28,7 @@ app.get("*", function(req, res) {
   
 
  app.post("/api/notes", function(req, res) {
-  fs.readFile('db.json', function (err, data) {
+  fs.readFile("./db/db.json", function (err, data) {
     if (err) throw err;   
     let notesArray = []
     JSON.parse(data);
