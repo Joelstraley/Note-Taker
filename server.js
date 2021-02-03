@@ -11,7 +11,6 @@ var PORT = 3010;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static(path.join("public")))
-/* app.use(express.static(path.join("assets/js"))) */
 
 app.get("/notes", function(req, res) {
     res.sendFile(path.join(__dirname, "/public/notes.html"));
@@ -22,26 +21,27 @@ app.get("/", function(req, res) {
   });
   
  app.get("/api/notes", function(req, res) { 
+  console.log(notes);
     return res.json(notes);
   });
 
-  
-
  app.post("/api/notes", function(req, res) {
-  fs.readFile("./db/db.json", function (err, data) {
-    if (err) throw err;   
-    let notesArray = []
-    JSON.parse(data);
+    console.log("in the api function");
+    rawdata = fs.readFileSync("./db/db.json") 
+    console.log(rawdata);
+    let data = JSON.parse(rawdata);
+    console.log(data);
+    let notesArray = data;
     req.body.id = data.length;
     notesArray.push(req.body);
-    fs.writeFile("./db/db.json", JSON.stringify(data), 
+    console.log(notesArray);
+    fs.writeFile("./db/db.json", JSON.stringify(notesArray), 
     function(err){
        if (err) throw err;
        console.log('success');
      });
-    res.json(JSON.parse(data));
-    })
-});
+    res.json(data)
+    });
 
 app.delete("/api/notes/:id", function(req, res) {
    fs.readFile("./db/db.json", function (err, data) {
