@@ -21,43 +21,40 @@ app.get("/", function(req, res) {
   });
   
  app.get("/api/notes", function(req, res) { 
-  console.log(notes);
     return res.json(notes);
   });
 
  app.post("/api/notes", function(req, res) {
-    console.log("in the api function");
-    rawdata = fs.readFileSync("./db/db.json") 
-    console.log(rawdata);
+    rawdata = fs.readFileSync("./db/db.json");
     let data = JSON.parse(rawdata);
-    console.log(data);
     let notesArray = data;
     req.body.id = data.length;
     notesArray.push(req.body);
-    console.log(notesArray);
-    fs.writeFile("./db/db.json", JSON.stringify(notesArray), 
+    let newData = JSON.stringify(notesArray);
+    fs.writeFile("./db/db.json", newData, 
     function(err){
        if (err) throw err;
        console.log('success');
      });
-    res.json(data)
+    res.json(newData) 
     });
 
 app.delete("/api/notes/:id", function(req, res) {
-   fs.readFile("./db/db.json", function (err, data) {
-    if (err) throw err; 
-    data = JSON.parse(data);
-    data.filter(function(note) {
-      return note.id !== parseInt(req.params.id);
+  let removedNote = req.params.id;
+  console.log(removedNote);
+  let rawdata = fs.readFileSync("./db/db.json");
+   let data = JSON.parse(rawdata);
+   console.log(data);
+   data = data.filter((note) => note.id != removedNote);
+   let newData = fs.writeFile("./db/db.json", JSON.stringify(data), 
+   function(err){
+      if (err) throw err;
+      console.log('success');
     });
-    fs.writeFile("./db/db.json", JSON.stringify(data), 
-    function(err){
-       if (err) throw err;
-       console.log('success');
-     });
-    res.json(JSON.parse(data));
-    })
-});
+   res.json(newData);
+  });
+
+
 
   app.listen(PORT, function() {
     console.log("App listening on PORT " + PORT);
