@@ -15,7 +15,7 @@ In the command line use "NPM INIT --Y" to install all Node Packages. This projec
 ## <a name="usage">Usage</a> 
 The app is used for text based note recording and retrieval. 
 
-Screenshot: 
+## Screenshot: 
 Add a Note: 
 ![alt text](https://github.com/Joelstraley/Note-Taker/blob/main/public/assets/Add%20a%20Note.png?raw=true)
 Saved Notes: 
