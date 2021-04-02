@@ -21,32 +21,32 @@ app.get("/", function(req, res) {
   });
   
  app.get("/api/notes", function(req, res) { 
-    return res.json(notes);
+    return res.json(getJSON());
   });
 
  app.post("/api/notes", function(req, res) {
-    rawdata = fs.readFileSync("./db/db.json");
-    let data = JSON.parse(rawdata);
-    let notesArray = data;
-    req.body.id = data.length;
-    notesArray.push(req.body);
-    let newData = JSON.stringify(notesArray);
-    fs.writeFile("./db/db.json", newData, 
+    const notesArray = getJSON();
+    let newNote = req.body;
+    newNote.id = data.length -1;
+    notesArray.push(newNote);
+    fs.writeFile("./db/db.json", JSON.stringify(notesArray), 
+    "UTF-8")
     function(err){
        if (err) throw err;
        console.log('success');
      });
-    res.json(newData) 
+    res.json(newNote) 
     });
 
 app.delete("/api/notes/:id", function(req, res) {
-  let removedNote = req.params.id;
-  console.log(removedNote);
-  let rawdata = fs.readFileSync("./db/db.json");
-   let data = JSON.parse(rawdata);
+  //Difference between fs.readFileSync("./db/db.json"); and getJSON() ? //
+  const removedNote = req.params.id;
+ /*  const rawdata = fs.readFileSync("./db/db.json"); */
+   const notes = getJSON();
+   const id = parseInt(removedNote);
    console.log(data);
-   data = data.filter((note) => note.id != removedNote);
-   let newData = fs.writeFile("./db/db.json", JSON.stringify(data), 
+   data = data.filter((note) => note.id != data);
+   const newData = fs.writeFile("./db/db.json", JSON.stringify(data), 
    function(err){
       if (err) throw err;
       console.log('success');
