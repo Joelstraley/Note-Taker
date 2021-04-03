@@ -12,6 +12,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static(path.join("public")))
 
+function getJSON() {
+  return JSON.parse(fs.readFileSync("./db/db.json", "UTF-8"))
+}
+
 app.get("/notes", function(req, res) {
     res.sendFile(path.join(__dirname, "/public/notes.html"));
   });
@@ -27,31 +31,31 @@ app.get("/", function(req, res) {
  app.post("/api/notes", function(req, res) {
     const notesArray = getJSON();
     let newNote = req.body;
-    newNote.id = data.length -1;
+    newNote.id = notes.length -1;
     notesArray.push(newNote);
-    fs.writeFile("./db/db.json", JSON.stringify(notesArray), 
+    fs.writeFileSync("./db/db.json", JSON.stringify(notesArray), 
     "UTF-8")
-    function(err){
+  /*   function(err){
        if (err) throw err;
        console.log('success');
-     });
+     }); */
     res.json(newNote) 
     });
 
 app.delete("/api/notes/:id", function(req, res) {
   //Difference between fs.readFileSync("./db/db.json"); and getJSON() ? //
-  const removedNote = req.params.id;
+
  /*  const rawdata = fs.readFileSync("./db/db.json"); */
-   const notes = getJSON();
+   const notesArray= getJSON();
+   const removedNote = req.params.id;
    const id = parseInt(removedNote);
-   console.log(data);
-   data = data.filter((note) => note.id != data);
-   const newData = fs.writeFile("./db/db.json", JSON.stringify(data), 
-   function(err){
+   const filteredData = notesArray.filter((note) => note.id != id)
+   fs.writeFileSync("./db/db.json", JSON.stringify(filteredData), "UTF-8"); 
+/*    function(err){
       if (err) throw err;
       console.log('success');
-    });
-   res.json(newData);
+    }); */
+/*    res.json(newData); */
   });
 
 
